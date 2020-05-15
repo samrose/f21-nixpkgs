@@ -11,6 +11,12 @@ let
   };
 in
 {
+
+   nixpkgs-mozilla = fetchTarball {
+    url = "https://github.com/mozilla/nixpkgs-mozilla/archive/dea7b9908e150a08541680462fe9540f39f2bceb.tar.gz";
+    sha256 = "0kvwbnwxbqhc3c3hn121c897m89d9wy02s8xcnrvqk9c96fj83qw";
+  };
+  inherit (callPackage "${nixpkgs-mozilla}/package-set.nix" {}) rustChannelOf;
   inherit (callPackage cargo-to-nix {})
     buildRustPackage
     cargoToNix
