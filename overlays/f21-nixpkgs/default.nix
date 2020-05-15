@@ -2,8 +2,19 @@ final: previous:
 
 with final;
 with lib;
-
+let 
+  cargo-to-nix = fetchFromGitHub {
+    owner = "Holo-Host";
+    repo = "cargo-to-nix";
+    rev = "ba6adc0a075dfac2234e851b0d4c2511399f2ef0";
+    sha256 = "1rcwpaj64fwz1mwvh9ir04a30ssg35ni41ijv9bq942pskagf1gl";
+  };
+in
 {
+  inherit (callPackage cargo-to-nix {})
+    buildRustPackage
+    cargoToNix
+  ;
   buildImage = imports:
     let
       system = nixos {
