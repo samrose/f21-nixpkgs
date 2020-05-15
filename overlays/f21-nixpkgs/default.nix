@@ -15,6 +15,31 @@ in
     buildRustPackage
     cargoToNix
   ;
+  rust = previous.rust // {
+    packages = previous.rust.packages // {
+      nightly = {
+        rustPlatform = final.makeRustPlatform {
+          inherit (buildPackages.rust.packages.nightly) cargo rustc;
+        };
+
+        cargo = final.rust.packages.nightly.rustc;
+        rustc = (
+          rustChannelOf {
+            channel = "nightly";
+            date = "2019-11-16";
+            sha256 = "17l8mll020zc0c629cypl5hhga4hns1nrafr7a62bhsp4hg9vswd";
+          }
+        ).rust.override {
+          targets = [
+            "aarch64-unknown-linux-musl"
+            "wasm32-unknown-unknown"
+            "x86_64-pc-windows-gnu"
+            "x86_64-unknown-linux-musl"
+          ];
+        };
+      };
+    };
+  };
   buildImage = imports:
     let
       system = nixos {
